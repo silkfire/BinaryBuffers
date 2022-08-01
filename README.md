@@ -1,6 +1,6 @@
 # BinaryBuffers
 
-![logo](https://github.com/silkfire/BinaryBuffers/blob/master/img/logo.png)
+![logo](https://github.com/silkfire/BinaryBuffers/blob/main/img/logo.png)
 
 [![NuGet](https://img.shields.io/nuget/v/BinaryBuffers.svg)](https://www.nuget.org/packages/BinaryBuffers)
 
