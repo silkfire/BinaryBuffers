@@ -472,7 +472,7 @@
             [Fact]
             public void Attempting_to_write_a_null_byte_array_should_throw()
             {
-                var actualException = Assert.Throws<ArgumentNullException>(() => { Fixture.BufferWriter.Write(null as byte[]); });
+                var actualException = Assert.Throws<ArgumentNullException>(() => Fixture.BufferWriter.Write(null as byte[]));
 
                 Assert.Equal("buffer", actualException.ParamName);
             }
@@ -480,7 +480,7 @@
             [Fact]
             public void Attempting_to_write_a_slice_of_a_null_byte_array_should_throw()
             {
-                var actualException = Assert.Throws<ArgumentNullException>(() => { Fixture.BufferWriter.Write(null as byte[], 0, 0); });
+                var actualException = Assert.Throws<ArgumentNullException>(() => Fixture.BufferWriter.Write(null as byte[], 0, 0));
 
                 Assert.Equal("buffer", actualException.ParamName);
             }

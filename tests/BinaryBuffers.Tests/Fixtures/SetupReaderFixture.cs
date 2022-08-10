@@ -29,7 +29,7 @@
         internal BinaryBufferReader BufferReader { get; }
         
         
-        protected static (byte[] Data, BinaryBufferReader BufferReader, MemoryStream dataStream) GetConstructorArgs(Func<byte[]> getData = null, (int Offset, int Length)? offsetAndLengthArgs = null)
+        protected static (byte[] Data, BinaryBufferReader BufferReader, MemoryStream DataStream) GetConstructorArgs(Func<byte[]> getData = null, (int Offset, int Length)? offsetAndLengthArgs = null)
         {
             var data = getData != null ? getData() : CreateDefaultData;
 
@@ -41,11 +41,11 @@
             return (data, new BinaryBufferReader(data), new MemoryStream(data));
         }
 
-        protected internal ReaderFixture((byte[] Data, BinaryBufferReader BufferReader, MemoryStream dataStream) args)
+        protected internal ReaderFixture((byte[] Data, BinaryBufferReader BufferReader, MemoryStream DataStream) args)
         {
             Data = args.Data;
             BufferReader = args.BufferReader;
-            NativeWriter = new BinaryWriter(args.dataStream);
+            NativeWriter = new BinaryWriter(args.DataStream);
         }
 
         public void Dispose()
@@ -75,7 +75,7 @@
 
     public sealed class ReaderFixtureArraySegment : ReaderFixture<ReaderFixtureArraySegment>
     {
-        private static (byte[] Data, BinaryBufferReader BufferReader, MemoryStream dataStream) GetConstructorArgs(ArraySegment<byte>? data = null, (int Offset, int Length)? offsetAndLengthArgs = null)
+        private static (byte[] Data, BinaryBufferReader BufferReader, MemoryStream DataStream) GetConstructorArgs(ArraySegment<byte>? data = null, (int Offset, int Length)? offsetAndLengthArgs = null)
         {
             byte[] dataArray;
             BinaryBufferReader bufferReader;
