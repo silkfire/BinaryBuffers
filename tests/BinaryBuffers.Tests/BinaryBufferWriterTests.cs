@@ -537,7 +537,7 @@
 
                 var expectedVal = Fixture.NativeReader.ReadBytes(writtenLength);
 
-                Assert.True(Fixture.BufferWriter.ToArray().SequenceEqual(expectedVal));
+                Assert.True(Fixture.BufferWriter.ToArray().AsSpan().SequenceEqual(expectedVal));
             }
 
             [Theory]
