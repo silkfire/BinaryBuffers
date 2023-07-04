@@ -532,7 +532,7 @@
             [Fact]
             public void Reading_a_decimal_value_with_an_invalid_representation_should_throw()
             {
-                var data = Enumerable.Range(0, 16).Select((_, i) => (byte)(i & 1)).ToArray();
+                var data = Enumerable.Range(0, 16).Select(i => (byte)(i & 1)).ToArray();
 
                 Fixture.NativeWriter.Write(data);
 

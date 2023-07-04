@@ -24,7 +24,6 @@
 
         protected internal static byte[] CreateDefaultData => new byte[DefaultDataLength];
 
-
         internal byte[] Data { get; }
         internal BinaryReader NativeReader { get; }
         internal BinaryBufferWriter BufferWriter { get; }

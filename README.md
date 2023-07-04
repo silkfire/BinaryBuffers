@@ -29,7 +29,7 @@ var time = reader.ReadDouble();
 
 # Benchmarks
 
-Performance tests were generated using **.NET 6** running on a machine with a 16-core CPU.
+Performance tests were executed using **.NET 6** running on a machine with a 16-core CPU.
 
 <table style="width: 100%">
     <thead>
