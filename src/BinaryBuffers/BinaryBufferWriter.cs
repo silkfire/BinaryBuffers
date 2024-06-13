@@ -2,9 +2,7 @@
 {
     using System;
     using System.Runtime.CompilerServices;
-#if NET6_0_OR_GREATER
     using System.Runtime.InteropServices;
-#endif
 
     /// <summary>
     /// Provides a writer for writing primitive data types to a byte array.
@@ -145,17 +143,7 @@
         /// <param name="value">The decimal value to write.</param>
         public virtual void Write(decimal value)
         {
-#if NET6_0_OR_GREATER
             decimal.GetBits(value, MemoryMarshal.Cast<byte, int>(_buffer.AsSpan(_position)));
-#else
-            var bits = decimal.GetBits(value);
-            var pos = _position;
-
-            Write(bits[0], pos);
-            Write(bits[1], pos + 4);
-            Write(bits[2], pos + 4 + 4);
-            Write(bits[3], pos + 4 + 4 + 4);
-#endif
 
             Advance(16);
         }
@@ -327,17 +315,6 @@
         /// Returns the underlying byte array of the writer.
         /// </summary>
         public byte[] ToArray() => ToReadOnlySpan().ToArray();
-
-#if !NET6_0_OR_GREATER
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Write(int value, int pos)
-        {
-            _buffer[pos + 0] = (byte)value;
-            _buffer[pos + 1] = (byte)(value >> 8);
-            _buffer[pos + 2] = (byte)(value >> 16);
-            _buffer[pos + 3] = (byte)(value >> 24);
-        }
-#endif
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Advance(int count)

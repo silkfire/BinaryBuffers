@@ -1,6 +1,6 @@
 # BinaryBuffers
 
-![logo](https://github.com/silkfire/BinaryBuffers/blob/main/img/logo.png)
+![logo](https://raw.githubusercontent.com/silkfire/BinaryBuffers/main/img/logo.png)
 
 [![NuGet](https://img.shields.io/nuget/v/BinaryBuffers.svg)](https://www.nuget.org/packages/BinaryBuffers)
 
@@ -29,134 +29,26 @@ var time = reader.ReadDouble();
 
 # Benchmarks
 
-Performance tests were executed using **.NET 6** running on a machine with a 16-core CPU.
+Performance tests were executed using **.NET 8** running on a machine with a 16-core CPU.
 
-<table style="width: 100%">
-    <thead>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;">BinaryBufferReader</span></th>
-        </tr>
-        <tr>
-            <th>Method</th>
-            <th>Mean</th>
-            <th>Error</th>
-            <th>StdDev</th>
-            <th>Ratio</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>BinaryReader_ReadInt</code></td>
-            <td>39.08 ms</td>
-            <td>0.563 ms</td>
-            <td>0.527 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferReader_ReadInt</code></td>
-            <td>33.80 ms</td>
-            <td>0.055 ms</td>
-            <td>0.049 ms</td>
-            <td style="text-align: right;">-14%</td>
-        </tr>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;"></span></th>
-        </tr>
-        <tr>
-            <td><code>BinaryReader_ReadDecimal</code></td>
-            <td>44.93 ms</td>
-            <td>0.275 ms</td>
-            <td>0.244 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferReader_ReadDecimal</code></td>
-            <td>37.73 ms</td>
-            <td>0.079 ms</td>
-            <td>0.074 ms</td>
-            <td style="text-align: right;">-16%</td>
-        </tr>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;"></span></th>
-        </tr>
-        <tr>
-            <td><code>BinaryReader_ReadFloat</code></td>
-            <td>22.48 ms</td>
-            <td>0.051 ms</td>
-            <td>0.047 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferReader_ReadFloat</code></td>
-            <td>19.05 ms</td>
-            <td>0.016 ms</td>
-            <td>0.014 ms</td>
-            <td style="text-align: right;">-13%</td>
-        </tr>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;"></span></th>
-        </tr>
-    </tbody>
-    <thead>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;">BinaryBufferWriter</span></th>
-        </tr>
-        <tr>
-            <th>Method</th>
-            <th>Mean</th>
-            <th>Error</th>
-            <th>StdDev</th>
-            <th>Ratio</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><code>BinaryWriter_WriteInt</code></td>
-            <td>66.61 ms</td>
-            <td>0.102 ms</td>
-            <td>0.096 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferWriter_WriteInt</code></td>
-            <td>33.77 ms</td>
-            <td>0.085 ms</td>
-            <td>0.075 ms</td>
-            <td style="text-align: right;">-49%</td>
-        </tr>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;"></span></th>
-        </tr>
-        <tr>
-            <td><code>BinaryWriter_WriteDecimal</code></td>
-            <td>41.44 ms</td>
-            <td>0.159 ms</td>
-            <td>0.149 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferWriter_WriteDecimal</code></td>
-            <td>17.14 ms</td>
-            <td>0.047 ms</td>
-            <td>0.044 ms</td>
-            <td style="text-align: right;">-59%</td>
-        </tr>
-        <tr>
-          <th colspan="5"><span style="font-size: 20px;"></span></th>
-        </tr>
-        <tr>
-            <td><code>BinaryWriter_WriteFloat</code></td>
-            <td>33.94 ms</td>
-            <td>0.080 ms</td>
-            <td>0.071 ms</td>
-            <td><em>baseline</em></td>
-        </tr>
-        <tr>
-            <td><code>BufferWriter_WriteFloat</code></td>
-            <td>18.08 ms</td>
-            <td>0.051 ms</td>
-            <td>0.047 ms</td>
-            <td style="text-align: right;">-47%</td>
-        </tr>
-    </tbody>
-</table>
+### BinaryBufferReader
+
+| Method                   | Mean     | Error    | StdDev   | Ratio    |
+|------------------------- |---------:|---------:|---------:|---------:|
+| `BinaryReader_ReadInt` | 16.592 ms | 0.0296 ms | 0.0277 ms | *baseline* |
+| `BufferReader_ReadInt` |  9.752 ms | 0.0139 ms | 0.0124 ms |     -41% |
+| `BinaryReader_ReadDecimal` | 72.75 ms | 0.253 ms | 0.211 ms | *baseline* |
+| `BufferReader_ReadDecimal` | 37.22 ms | 0.118 ms | 0.104 ms |     -49% |
+| `BinaryReader_ReadFloat` | 9.053 ms | 0.0325 ms | 0.0304 ms | *baseline* |
+| `BufferReader_ReadFloat` | 6.257 ms | 0.0150 ms | 0.0133 ms |     -31% |
+
+### BinaryBufferWriter
+
+| Method                    | Mean      | Error     | StdDev    | Ratio    |
+|-------------------------- |----------:|----------:|----------:|---------:|
+| `BinaryWriter_WriteInt` | 58.33 ms | 0.066 ms | 0.062 ms | *baseline* |
+| `BufferWriter_WriteInt` | 21.13 ms | 0.046 ms | 0.043 ms |     -64% |
+| `BinaryWriter_WriteDecimal` | 38.592 ms | 0.0729 ms | 0.0569 ms | *baseline* |
+| `BufferWriter_WriteDecimal` |  8.847 ms | 0.0351 ms | 0.0328 ms |     -77% |
+| `BinaryWriter_WriteFloat` | 30.86 ms | 0.106 ms | 0.100 ms | *baseline* |
+| `BufferWriter_WriteFloat` | 10.14 ms | 0.023 ms | 0.020 ms |     -67% |

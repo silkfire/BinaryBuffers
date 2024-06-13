@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <CoverageFileName>coverage.cobertura.xml</CoverageFileName>
+          <IncludeTestAssembly>False</IncludeTestAssembly>
+
+          <CodeCoverage>
+            <ModulePaths>
+              <Include>
+                <ModulePath>.*[\\/]BinaryBuffers\.dll$</ModulePath>
+              </Include>
+            </ModulePaths>
+            <Sources>
+              <Exclude>
+                <Source>.*[\\/]BinaryBuffers[\\/]ExceptionHelper\.cs$</Source>
+                <Source>.*[\\/]BinaryBuffers[\\/]BinaryBufferMemoryReader.cs$</Source>
+              </Exclude>
+            </Sources>
+
+            <EnableStaticNativeInstrumentation>False</EnableStaticNativeInstrumentation>
+            <EnableDynamicNativeInstrumentation>False</EnableDynamicNativeInstrumentation>
+          </CodeCoverage>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

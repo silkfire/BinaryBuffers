@@ -116,19 +116,12 @@
             var buffer = InternalReadSpan(16);
             try
             {
-                return new decimal(
-#if NET6_0_OR_GREATER
-                                   stackalloc 
-#else
-                                   new
-#endif
-                                   []
-                                   {
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer),          // lo
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4)), // mid
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(8)), // hi
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(12)) // flags
-                                   });
+                return new decimal([
+                                       BinaryPrimitives.ReadInt32LittleEndian(buffer),                  // lo
+                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4)),         // mid
+                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(8)),         // hi
+                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(12))         // flags
+                                   ]);
             }
             catch (ArgumentException e)
             {
@@ -165,17 +158,13 @@
         /// <summary>
         /// Reads a single-precision floating-point number from the underlying byte array and advances the current position by four bytes.
         /// </summary>
-#if NETSTANDARD2_0
         public virtual unsafe float ReadSingle()
         {
             var m_buffer = InternalReadSpan(4);
-            uint tmpBuffer = (uint)(m_buffer[0] | m_buffer[1] << 8 | m_buffer[2] << 16 | m_buffer[3] << 24);
+            var tmpBuffer = (uint)(m_buffer[0] | m_buffer[1] << 8 | m_buffer[2] << 16 | m_buffer[3] << 24);
 
             return *((float*)&tmpBuffer);
         }
-#else
-        public virtual float ReadSingle() => BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(InternalReadSpan(4)));
-#endif
 
         /// <summary>
         /// Reads a span of bytes from the underlying byte array and advances the current position by the number of bytes read.
