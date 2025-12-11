@@ -8,7 +8,8 @@
     {
         public static void Main()
         {
-            BenchmarkRunner.Run(typeof(App).Assembly, new PerformanceConfig());
+            //BenchmarkRunner.Run(typeof(App).Assembly, new PerformanceConfig());
+            BenchmarkRunner.Run<BinaryReaderVsBufferReader_Decimal>(new PerformanceConfig());
         }
     }
 }

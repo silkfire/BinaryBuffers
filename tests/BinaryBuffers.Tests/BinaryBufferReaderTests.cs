@@ -440,7 +440,7 @@
 
                 Assert.Equal(input, val.Length);
 
-                for (int i = 0; i < buff.Length; i++)
+                for (var i = 0; i < buff.Length; i++)
                 {
                     Assert.Equal(buff[i], val[i]);
                 }
@@ -527,19 +527,6 @@
                 var actualSpan = Fixture.BufferReader.ReadSpan(-1);
 
                 Assert.True(actualSpan.SequenceEqual(ReadOnlySpan<byte>.Empty));
-            }
-
-            [Fact]
-            public void Reading_a_decimal_value_with_an_invalid_representation_should_throw()
-            {
-                var data = Enumerable.Range(0, 16).Select(i => (byte)(i & 1)).ToArray();
-
-                Fixture.NativeWriter.Write(data);
-
-                var expectedException = ExceptionHelper.DecimalReadingException(null);
-                var actualException = Assert.Throws<IOException>(() => _ = Fixture.BufferReader.ReadDecimal());
-
-                Assert.Equal(expectedException.Message, actualException.Message);
             }
         }
 

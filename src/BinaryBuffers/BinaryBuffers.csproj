@@ -2,14 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <NoWarn>IDE0057</NoWarn>
     <Authors>Gabriel Bider, Salar Khalilzadeh</Authors>
     <PackageTags>binary buffers binaryreader binarywriter binaryprimitives</PackageTags>
     <PackageProjectUrl>https://github.com/silkfire/BinaryBuffers</PackageProjectUrl>
     <Copyright>Copyright © 2026</Copyright>
     <Description>A high-performance implementation of BinaryReader and BinaryWriter which works on binary arrays directly by eliminating the need for an intermediate stream object.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <Version>4.0.0</Version>
+    <AssemblyVersion>4.1.0.0</AssemblyVersion>
+    <Version>4.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -98,7 +98,10 @@
             }
             else
             {
-                if (offsetAndLengthArgs.HasValue) throw new InvalidOperationException("Redundant offset and length arguments provided; array segment is already initialized.");
+                if (offsetAndLengthArgs.HasValue)
+                {
+                    throw new InvalidOperationException("Redundant offset and length arguments provided; array segment is already initialized.");
+                }
 
                 dataArray = data.Value.Array;
                 bufferReader = new BinaryBufferReader(data.Value);

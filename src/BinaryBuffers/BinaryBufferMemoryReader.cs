@@ -31,8 +31,15 @@
             {
                 var newPosition = _position + value;
 
-                if (newPosition < 0) throw ExceptionHelper.PositionLessThanZeroException(nameof(value));
-                if (newPosition > Length) throw ExceptionHelper.PositionGreaterThanLengthOfReadOnlyMemoryException(nameof(value));
+                if (newPosition < 0)
+                {
+                    throw ExceptionHelper.PositionLessThanZeroException(nameof(value));
+                }
+
+                if (newPosition > Length)
+                {
+                    throw ExceptionHelper.PositionGreaterThanLengthOfReadOnlyMemoryException(nameof(value));
+                }
 
                 _position = newPosition;
             }
@@ -74,26 +81,23 @@
         public virtual decimal ReadDecimal()
         {
             var buffer = InternalReadSpan(16);
-            try
-            {
-                return new decimal([
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer),          // lo
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4)), // mid
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(8)), // hi
-                                       BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(12)) // flags
-                                   ]);
-            }
-            catch (ArgumentException e)
-            {
-                // ReadDecimal cannot leak out ArgumentException
-                throw ExceptionHelper.DecimalReadingException(e);
-            }
+
+            var flags = BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(12));
+
+            var isNegative = (flags & unchecked((int)0x80000000)) != 0;
+            var scale = (byte)((flags >> 16) & 0xFF);
+
+            return new decimal(BinaryPrimitives.ReadInt32LittleEndian(buffer),                  // lo
+                               BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4)),         // mid
+                               BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(8)),         // hi
+                               isNegative,
+                               scale);
         }
 
         /// <summary>
         /// Reads a double-precision floating-point number from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by eight bytes.
         /// </summary>
-        public virtual double ReadDouble() => BitConverter.Int64BitsToDouble(BinaryPrimitives.ReadInt64LittleEndian(InternalReadSpan(8)));
+        public virtual double ReadDouble() => BinaryPrimitives.ReadDoubleLittleEndian(InternalReadSpan(8));
 
         /// <summary>
         /// Reads a 16-bit signed integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by two bytes.
@@ -118,13 +122,7 @@
         /// <summary>
         /// Reads a single-precision floating-point number from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by four bytes.
         /// </summary>
-        public virtual unsafe float ReadSingle()
-        {
-            var m_buffer = InternalReadSpan(4);
-            var tmpBuffer = (uint)(m_buffer[0] | m_buffer[1] << 8 | m_buffer[2] << 16 | m_buffer[3] << 24);
-
-            return *((float*)&tmpBuffer);
-        }
+        public virtual float ReadSingle() => BinaryPrimitives.ReadSingleLittleEndian(InternalReadSpan(4));
 
         /// <summary>
         /// Reads a span of bytes from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by the number of bytes read.
@@ -152,8 +150,8 @@
         /// </summary>
         protected byte InternalReadByte()
         {
-            int curPos = _position;
-            int newPos = curPos + 1;
+            var curPos = _position;
+            var newPos = curPos + 1;
 
             if ((uint)newPos > (uint)Length)
             {
@@ -172,10 +170,13 @@
         /// <param name="count">The size of the read-only span to return.</param>
         protected ReadOnlySpan<byte> InternalReadSpan(int count)
         {
-            if (count <= 0) return ReadOnlySpan<byte>.Empty;
+            if (count <= 0)
+            {
+                return ReadOnlySpan<byte>.Empty;
+            }
 
-            int curPos = _position;
-            int newPos = curPos + count;
+            var curPos = _position;
+            var newPos = curPos + count;
 
             if ((uint)newPos > (uint) Length)
             {

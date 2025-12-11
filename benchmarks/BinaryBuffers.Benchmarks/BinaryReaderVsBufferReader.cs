@@ -26,7 +26,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryReader_ReadInt()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -38,7 +38,7 @@
         [Benchmark]
         public void BufferReader_ReadInt()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferReader.Position = 0;
 
@@ -53,7 +53,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryReader_ReadDecimal()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -65,7 +65,7 @@
         [Benchmark]
         public void BufferReader_ReadDecimal()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferReader.Position = 0;
 
@@ -79,7 +79,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryReader_ReadFloat()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -91,7 +91,7 @@
         [Benchmark]
         public void BufferReader_ReadFloat()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferReader.Position = 0;
 

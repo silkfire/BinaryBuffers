@@ -28,7 +28,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryWriter_WriteInt()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -40,7 +40,7 @@
         [Benchmark]
         public void BufferWriter_WriteInt()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferWriter.Position = 0;
 
@@ -56,7 +56,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryWriter_WriteFloat()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -67,7 +67,7 @@
         [Benchmark]
         public void BufferWriter_WriteFloat()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferWriter.Position = 0;
 
@@ -81,7 +81,7 @@
         [Benchmark(Baseline = true)]
         public void BinaryWriter_WriteDecimal()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _memoryStream.Position = 0;
 
@@ -92,7 +92,7 @@
         [Benchmark]
         public void BufferWriter_WriteDecimal()
         {
-            for (int i = 0; i < Loops; i++)
+            for (var i = 0; i < Loops; i++)
             {
                 _bufferWriter.Position = 0;
 

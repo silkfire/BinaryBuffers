@@ -1,6 +1,7 @@
 ﻿namespace BinaryBuffers
 {
     using System;
+    using System.Buffers.Binary;
     using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
@@ -33,8 +34,15 @@
             {
                 var newPosition = Offset + value;
 
-                if (value < 0) throw ExceptionHelper.PositionLessThanZeroException(nameof(value));
-                if (value > Length) throw ExceptionHelper.PositionGreaterThanLengthOfByteArrayException(nameof(value));
+                if (value < 0)
+                {
+                    throw ExceptionHelper.PositionLessThanZeroException(nameof(value));
+                }
+
+                if (value > Length)
+                {
+                    throw ExceptionHelper.PositionGreaterThanLengthOfByteArrayException(nameof(value));
+                }
 
                 _relativePositon = value;
                 _position = newPosition;
@@ -72,9 +80,20 @@
         {
             _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
-            if (offset < 0) throw ExceptionHelper.OffsetLessThanZeroException(nameof(offset));
-            if (length < 0) throw ExceptionHelper.LengthLessThanZeroException(nameof(length));
-            if (length > _buffer.Length - offset) throw ExceptionHelper.LengthGreaterThanEffectiveLengthOfByteArrayException();
+            if (offset < 0)
+            {
+                throw ExceptionHelper.OffsetLessThanZeroException(nameof(offset));
+            }
+
+            if (length < 0)
+            {
+                throw ExceptionHelper.LengthLessThanZeroException(nameof(length));
+            }
+
+            if (length > _buffer.Length - offset)
+            {
+                throw ExceptionHelper.LengthGreaterThanEffectiveLengthOfByteArrayException();
+            }
 
             _position = offset;
             _relativePositon = 0;
@@ -112,7 +131,10 @@
         /// <param name="buffer">The buffer to copy data from.</param>
         public virtual void Write(byte[] buffer)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
 
             var pos = _position;
             var length = buffer.Length;
@@ -129,7 +151,10 @@
         /// <param name="length">The number of bytes to copy.</param>
         public virtual void Write(byte[] buffer, int offset, int length)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (buffer == null)
+            {
+                throw new ArgumentNullException(nameof(buffer));
+            }
 
             var pos = _position;
             Advance(length);
@@ -152,21 +177,12 @@
         /// Writes a double-precision floating-point number to the underlying byte array and advances the current position by eight bytes.
         /// </summary>
         /// <param name="value">The double-precision floating-point number to write.</param>
-        public virtual unsafe void Write(double value)
+        public virtual void Write(double value)
         {
             var pos = _position;
-            var buff = _buffer;
             Advance(8);
 
-            ulong tmpValue = *(ulong*)&value;
-            buff[pos + 0] = (byte)tmpValue;
-            buff[pos + 1] = (byte)(tmpValue >> 8);
-            buff[pos + 2] = (byte)(tmpValue >> 16);
-            buff[pos + 3] = (byte)(tmpValue >> 24);
-            buff[pos + 4] = (byte)(tmpValue >> 32);
-            buff[pos + 5] = (byte)(tmpValue >> 40);
-            buff[pos + 6] = (byte)(tmpValue >> 48);
-            buff[pos + 7] = (byte)(tmpValue >> 56);
+            BinaryPrimitives.WriteDoubleLittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -178,8 +194,7 @@
             var pos = _position;
             Advance(2);
 
-            _buffer[pos + 0] = (byte)value;
-            _buffer[pos + 1] = (byte)(value >> 8);
+            BinaryPrimitives.WriteInt16LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -191,10 +206,7 @@
             var pos = _position;
             Advance(4);
 
-            _buffer[pos + 0] = (byte)value;
-            _buffer[pos + 1] = (byte)(value >> 8);
-            _buffer[pos + 2] = (byte)(value >> 16);
-            _buffer[pos + 3] = (byte)(value >> 24);
+            BinaryPrimitives.WriteInt32LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -204,17 +216,9 @@
         public virtual void Write(long value)
         {
             var pos = _position;
-            var buff = _buffer;
             Advance(8);
 
-            buff[pos + 0] = (byte)value;
-            buff[pos + 1] = (byte)(value >> 8);
-            buff[pos + 2] = (byte)(value >> 16);
-            buff[pos + 3] = (byte)(value >> 24);
-            buff[pos + 4] = (byte)(value >> 32);
-            buff[pos + 5] = (byte)(value >> 40);
-            buff[pos + 6] = (byte)(value >> 48);
-            buff[pos + 7] = (byte)(value >> 56);
+            BinaryPrimitives.WriteInt64LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -233,16 +237,12 @@
         /// Writes a single-precision floating-point number to the underlying byte array and advances the current position by one byte.
         /// </summary>
         /// <param name="value">The single-precision floating-point number to write.</param>
-        public virtual unsafe void Write(float value)
+        public virtual void Write(float value)
         {
             var pos = _position;
             Advance(4);
 
-            uint tmpValue = *(uint*)&value;
-            _buffer[pos + 0] = (byte)tmpValue;
-            _buffer[pos + 1] = (byte)(tmpValue >> 8);
-            _buffer[pos + 2] = (byte)(tmpValue >> 16);
-            _buffer[pos + 3] = (byte)(tmpValue >> 24);
+            BinaryPrimitives.WriteSingleLittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -267,8 +267,7 @@
             var pos = _position;
             Advance(2);
 
-            _buffer[pos + 0] = (byte)value;
-            _buffer[pos + 1] = (byte)(value >> 8);
+            BinaryPrimitives.WriteUInt16LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -280,10 +279,7 @@
             var pos = _position;
             Advance(4);
 
-            _buffer[pos + 0] = (byte)value;
-            _buffer[pos + 1] = (byte)(value >> 8);
-            _buffer[pos + 2] = (byte)(value >> 16);
-            _buffer[pos + 3] = (byte)(value >> 24);
+            BinaryPrimitives.WriteUInt32LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -293,17 +289,9 @@
         public virtual void Write(ulong value)
         {
             var pos = _position;
-            var buff = _buffer;
             Advance(8);
 
-            buff[pos + 0] = (byte)value;
-            buff[pos + 1] = (byte)(value >> 8);
-            buff[pos + 2] = (byte)(value >> 16);
-            buff[pos + 3] = (byte)(value >> 24);
-            buff[pos + 4] = (byte)(value >> 32);
-            buff[pos + 5] = (byte)(value >> 40);
-            buff[pos + 6] = (byte)(value >> 48);
-            buff[pos + 7] = (byte)(value >> 56);
+            BinaryPrimitives.WriteUInt64LittleEndian(_buffer.AsSpan(pos), value);
         }
 
         /// <summary>
@@ -320,7 +308,7 @@
         private void Advance(int count)
         {
             var newPos = _position + count;
-            int relPos = _relativePositon + count;
+            var relPos = _relativePositon + count;
 
             if ((uint)relPos > (uint)Length)
             {
@@ -331,7 +319,10 @@
             _relativePositon = relPos;
             _position = newPos;
 
-            if (count > 0) WrittenLength = Math.Max(_relativePositon, WrittenLength);
+            if (count > 0)
+            {
+                WrittenLength = Math.Max(_relativePositon, WrittenLength);
+            }
         }
     }
 }

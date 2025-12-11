@@ -53,10 +53,5 @@
         {
             return new EndOfStreamException("Reached to end of data");
         }
-
-        public static IOException DecimalReadingException(ArgumentException argumentException)
-        {
-            return new IOException("Failed to read decimal value", argumentException);
-        }
     }
 }

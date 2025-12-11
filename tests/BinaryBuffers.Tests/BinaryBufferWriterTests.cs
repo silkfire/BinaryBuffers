@@ -260,7 +260,7 @@
 
                 var val = Fixture.NativeReader.ReadBytes(dataLength);
 
-                Assert.True(val.SequenceEqual(buff[dataOffset..(dataOffset + dataLength)]));
+                Assert.True(val.SequenceEqual(new ReadOnlySpan<byte>(buff).Slice(dataOffset, dataLength)));
             }
 
             protected void WriteSpanBase(int dataLength, byte data)
