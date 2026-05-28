@@ -8,10 +8,32 @@
     <PackageProjectUrl>https://github.com/silkfire/BinaryBuffers</PackageProjectUrl>
     <Copyright>Copyright © 2026</Copyright>
     <Description>A high-performance implementation of BinaryReader and BinaryWriter which works on binary arrays directly by eliminating the need for an intermediate stream object.</Description>
+    <DocumentationFile>./BinaryBuffers.xml</DocumentationFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyVersion>4.1.0.0</AssemblyVersion>
     <Version>4.1.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Visible>False</Visible>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Visible>False</Visible>
+    </None>
+    <None Include="..\..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Visible>False</Visible>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
