@@ -1,0 +1,480 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BinaryBuffers</name>
+    </assembly>
+    <members>
+        <member name="T:BinaryBuffers.BinaryBufferMemoryReader">
+            <summary>
+            Implements an <see cref="T:BinaryBuffers.IBufferReader"/> that can read primitive data types from a <see cref="T:System.Byte"/>-based <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferMemoryReader.Offset">
+            <summary>
+            Gets the offset into the underlying <see cref="T:System.ReadOnlyMemory`1"/> to start reading from.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferMemoryReader.Length">
+            <summary>
+            Gets the effective length of the readable region of the underlying <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferMemoryReader.Position">
+            <summary>
+            Gets or sets the current reading position within the underlying <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.#ctor(System.ReadOnlyMemory{System.Byte}@)">
+            <summary>
+            Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
+            </summary>
+            <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
+            
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadBoolean">
+            <summary>
+            Reads a boolean value from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadByte">
+            <summary>
+            Reads the next byte from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadBytes(System.Int32)">
+            <summary>
+            Reads the specified number of bytes from the underlying <see cref="T:System.ReadOnlyMemory`1"/> into a new byte array and advances the current position by that number of bytes.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadDecimal">
+            <summary>
+            Reads a decimal value from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by sixteen bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadDouble">
+            <summary>
+            Reads a double-precision floating-point number from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadInt16">
+            <summary>
+            Reads a 16-bit signed integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadInt32">
+            <summary>
+            Reads a 32-bit signed integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadInt64">
+            <summary>
+            Reads a 64-bit signed integer signed integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadSByte">
+            <summary>
+            Reads a signed byte from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadSingle">
+            <summary>
+            Reads a single-precision floating-point number from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadSpan(System.Int32)">
+            <summary>
+            Reads a span of bytes from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by the number of bytes read.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadUInt16">
+            <summary>
+            Reads a 16-bit unsigned integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadUInt32">
+            <summary>
+            Reads a 32-bit unsigned integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadUInt64">
+            <summary>
+            Reads a 64-bit unsigned integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.InternalReadByte">
+            <summary>
+            Reads the next byte from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.InternalReadSpan(System.Int32)">
+            <summary>
+            Returns a read-only span over the specified number of bytes from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by that number of bytes.
+            </summary>
+            <param name="count">The size of the read-only span to return.</param>
+        </member>
+        <member name="T:BinaryBuffers.BinaryBufferReader">
+            <summary>
+            Implements an <see cref="T:BinaryBuffers.IBufferReader"/> that can read primitive data types from a byte array.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferReader.Offset">
+            <summary>
+            Gets the offset into the underlying byte array to start reading from.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferReader.Length">
+            <summary>
+            Gets the effective length of the readable region of the underlying byte array.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferReader.Position">
+            <summary>
+            Gets or sets the current reading position within the underlying byte array.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:BinaryBuffers.BinaryBufferReader"/> class based on the specified byte array.
+            </summary>
+            <param name="data">The byte array to read from.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.#ctor(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BinaryBuffers.BinaryBufferReader"/> class based on the specified byte array.
+            <para>A provided offset and length specifies the boundaries to use for reading.</para>
+            </summary>
+            <param name="data">The byte array to read from.</param>
+            <param name="offset">The 0-based offset into the byte array at which to begin reading from.
+            <para>Cannot exceed the bounds of the byte array.</para></param>
+            <param name="length">The maximum number of bytes that the reader will use for reading, relative to the offset position.
+            <para>Cannot exceed the bounds of the byte array.</para></param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.#ctor(System.ArraySegment{System.Byte}@)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BinaryBuffers.BinaryBufferReader"/> class based on the specified byte array segment.
+            </summary>
+            <param name="data">The byte array segment to read from.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadBoolean">
+            <summary>
+            Reads a boolean value from the underlying byte array and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadByte">
+            <summary>
+            Reads the next byte from the underlying byte array and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadBytes(System.Int32)">
+            <summary>
+            Reads the specified number of bytes from the underlying byte array into a new byte array and advances the current position by that number of bytes.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadDecimal">
+            <summary>
+            Reads a decimal value from the underlying byte array and advances the current position by sixteen bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadDouble">
+            <summary>
+            Reads a double-precision floating-point number from the underlying byte array and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadInt16">
+            <summary>
+            Reads a 16-bit signed integer from the underlying byte array and advances the current position by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadInt32">
+            <summary>
+            Reads a 32-bit signed integer from the underlying byte array and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadInt64">
+            <summary>
+            Reads a 64-bit signed integer from the underlying byte array and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadSByte">
+            <summary>
+            Reads a signed byte from the underlying byte array and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadSingle">
+            <summary>
+            Reads a single-precision floating-point number from the underlying byte array and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadSpan(System.Int32)">
+            <summary>
+            Reads a span of bytes from the underlying byte array and advances the current position by the number of bytes read.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadUInt16">
+            <summary>
+            Reads a 16-bit unsigned integer from the underlying byte array and advances the current position by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadUInt32">
+            <summary>
+            Reads a 32-bit unsigned integer from the underlying byte array and advances the current position by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadUInt64">
+            <summary>
+            Reads a 64-bit unsigned integer from the underlying byte array and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.InternalReadByte">
+            <summary>
+            Reads the next byte from the underlying byte array and advances the current position by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.InternalReadSpan(System.Int32)">
+            <summary>
+            Returns a read-only span over the specified number of bytes from the underlying byte array and advances the current position by that number of bytes.
+            </summary>
+            <param name="count">The size of the read-only span to return.</param>
+        </member>
+        <member name="T:BinaryBuffers.BinaryBufferWriter">
+            <summary>
+            Provides a writer for writing primitive data types to a byte array.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferWriter.Offset">
+            <summary>
+            Gets the offset into the underlying byte array to start writing from.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferWriter.Length">
+            <summary>
+            Gets the effective length of the writable region of the underlying byte array.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferWriter.Position">
+            <summary>
+            Gets or sets the current writing position within the underlying byte array.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.BinaryBufferWriter.WrittenLength">
+            <summary>
+            Gets the total number of bytes written to the underlying byte array.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.#ctor(System.Byte[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:BinaryBuffers.BinaryBufferWriter"/> class using the specified byte array to write the output to.
+            </summary>
+            <param name="buffer">The byte array to write to.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.#ctor(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:BinaryBuffers.BinaryBufferWriter"/> class using the specified byte array to write the output to.
+            <para>A provided offset and length specifies the boundaries to use for writing.</para>
+            </summary>
+            <param name="buffer">The output buffer to write to.</param>
+            <param name="offset">The 0-based offset into the byte array at which to begin writing from.
+            <para>Cannot exceed the bounds of the byte array.</para></param>
+            <param name="length">The maximum number of bytes that the writer will use for writing, relative to the offset position.
+            <para>Cannot exceed the bounds of the byte array.</para></param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Boolean)">
+            <summary>
+            Writes a boolean value to the underlying byte array and advances the current position by one byte.
+            </summary>
+            <param name="value">The boolean value to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Byte)">
+            <summary>
+            Writes a byte to the underlying byte array and advances the current position by one byte.
+            </summary>
+            <param name="value">The byte value to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Byte[])">
+            <summary>
+            Copies the contents of a byte array to the underlying byte array of the writer and advances the current position by the number of bytes written.
+            </summary>
+            <param name="buffer">The buffer to copy data from.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Copies a region of a byte array to the underlying byte array of the writer and advances the current position by the number of bytes written.
+            </summary>
+            <param name="buffer">The buffer to copy data from.</param>
+            <param name="offset">The 0-based offset in buffer at which to start copying from.</param>
+            <param name="length">The number of bytes to copy.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Decimal)">
+            <summary>
+            Writes a decimal value to the underlying byte array and advances the current position by sixteen bytes.
+            </summary>
+            <param name="value">The decimal value to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Double)">
+            <summary>
+            Writes a double-precision floating-point number to the underlying byte array and advances the current position by eight bytes.
+            </summary>
+            <param name="value">The double-precision floating-point number to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Int16)">
+            <summary>
+            Writes a 16-bit signed integer to the underlying byte array and advances the current position by two bytes.
+            </summary>
+            <param name="value">The 16-bit signed integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Int32)">
+            <summary>
+            Writes a 32-bit signed integer to the underlying byte array and advances the current position by four bytes.
+            </summary>
+            <param name="value">The 32-bit signed integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Int64)">
+            <summary>
+            Writes a 64-bit signed integer to the underlying byte array and advances the current position by eight bytes.
+            </summary>
+            <param name="value">The 64-bit signed integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.SByte)">
+            <summary>
+            Writes a signed byte to the underlying byte array and advances the current position by one byte.
+            </summary>
+            <param name="value">The signed byte value to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.Single)">
+            <summary>
+            Writes a single-precision floating-point number to the underlying byte array and advances the current position by one byte.
+            </summary>
+            <param name="value">The single-precision floating-point number to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.ReadOnlySpan{System.Byte}@)">
+            <summary>
+            Copies a span of bytes to the underlying byte array and advances the current position by the number of bytes written.
+            </summary>
+            <param name="buffer">The span of bytes to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.UInt16)">
+            <summary>
+            Writes a 16-bit unsigned integer to the underlying byte array and advances the current position by two bytes.
+            </summary>
+            <param name="value">The 16-bit unsigned integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.UInt32)">
+            <summary>
+            Writes a 32-bit unsigned integer to the underlying byte array and advances the current position by four bytes.
+            </summary>
+            <param name="value">The 32-bit unsigned integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.Write(System.UInt64)">
+            <summary>
+            Writes a 64-bit unsigned integer value to the underlying byte array and advances the current position by eight bytes.
+            </summary>
+            <param name="value">The 64-bit unsigned integer to write.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.ToReadOnlySpan">
+            <summary>
+            Creates a span over the underlying byte array of the writer.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.ToArray">
+            <summary>
+            Returns the underlying byte array of the writer.
+            </summary>
+        </member>
+        <member name="T:BinaryBuffers.IBufferReader">
+            <summary>
+            Represents a reader that can read primitive data types from a binary data source.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.IBufferReader.Offset">
+            <summary>
+            Gets the offset into the stream to start reading from.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.IBufferReader.Length">
+            <summary>
+            Gets the effective length of the readable region of the stream.
+            </summary>
+        </member>
+        <member name="P:BinaryBuffers.IBufferReader.Position">
+            <summary>
+            Gets or sets the current reading position within the stream.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadBoolean">
+            <summary>
+            Reads a boolean value from the current binary stream and advances the current position within the stream by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadByte">
+            <summary>
+            Reads the next byte from the current binary stream and advances the current position within the stream by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadBytes(System.Int32)">
+            <summary>
+            Reads the specified number of bytes from the current binary stream into a byte array and advances the current position within the stream by that number of bytes.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadDecimal">
+            <summary>
+            Reads a decimal value from the current binary stream and advances the current position within the stream by sixteen bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadDouble">
+            <summary>
+            Reads a double-precision floating-point number from the current binary stream and advances the current position within the stream by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadInt16">
+            <summary>
+            Reads a 16-bit signed integer from the current binary stream and advances the current position within the stream by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadInt32">
+            <summary>
+            Reads a 32-bit signed integer from the current binary stream and advances the current position within the stream by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadInt64">
+            <summary>
+            Reads a 63-bit signed integer from the current binary stream and advances the current position within the stream by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadSByte">
+            <summary>
+            Reads a signed byte from the current binary stream and advances the current position within the stream by one byte.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadSingle">
+            <summary>
+            Reads single-precision floating-point number from the current binary stream and advances the current position within the stream by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadSpan(System.Int32)">
+            <summary>
+            Reads a span of bytes from the current binary stream and advances the current position within the stream by the number of bytes read.
+            </summary>
+            <param name="count">The number of bytes to read.</param>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadUInt16">
+            <summary>
+            Reads a 16-bit unsigned integer from the current binary stream and advances the current position within the stream by two bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadUInt32">
+            <summary>
+            Reads a 32-bit unsigned integer from the current binary stream and advances the current position within the stream by four bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadUInt64">
+            <summary>
+            Reads 64-bit unsigned integer from the current binary stream and advances the current position within the stream by eight bytes.
+            </summary>
+        </member>
+    </members>
+</doc>
