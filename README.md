@@ -1,4 +1,4 @@
-# BinaryBuffers
+﻿# BinaryBuffers
 
 ![logo](https://raw.githubusercontent.com/silkfire/BinaryBuffers/main/img/logo.png)
 
