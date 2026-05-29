@@ -502,6 +502,113 @@ public class BinaryBufferReaderTests
             Assert.Equal(8, Fixture.BufferReader.Position);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(int.MinValue)]
+        [InlineData(int.MaxValue)]
+        [InlineData(int.MaxValue / 2)]
+        public void Read_generic_int32(int input)
+        {
+            Fixture.NativeWriter.Write(input);
+
+            var val = Fixture.BufferReader.Read<int>();
+
+            Assert.Equal(input, val);
+            Assert.Equal(4, Fixture.BufferReader.Position);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1.1)]
+        [InlineData(double.MinValue)]
+        [InlineData(double.MaxValue)]
+        public void Read_generic_double(double input)
+        {
+            Fixture.NativeWriter.Write(input);
+
+            var val = Fixture.BufferReader.Read<double>();
+
+            Assert.Equal(input, val);
+            Assert.Equal(8, Fixture.BufferReader.Position);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(byte.MaxValue)]
+        public void Read_generic_byte_does_not_swap(byte input)
+        {
+            Fixture.NativeWriter.Write(input);
+
+            var val = Fixture.BufferReader.Read<byte>();
+
+            Assert.Equal(input, val);
+            Assert.Equal(1, Fixture.BufferReader.Position);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public void ReadInto_int32_span_reads_the_expected_values(int count)
+        {
+            var expected = new int[count];
+
+            for (var i = 0; i < count; i++)
+            {
+                expected[i] = (i + 1) * -7;
+                Fixture.NativeWriter.Write(expected[i]);
+            }
+
+            var actual = new int[count];
+            Fixture.BufferReader.ReadInto<int>(actual);
+
+            Assert.Equal(expected, actual);
+            Assert.Equal(count * sizeof(int), Fixture.BufferReader.Position);
+        }
+
+        [Fact]
+        public void ReadInto_matches_repeated_Read_for_the_same_data()
+        {
+            const int count = 64;
+
+            for (var i = 0; i < count; i++)
+            {
+                Fixture.NativeWriter.Write(i * 1234567);
+            }
+
+            var bulk = new int[count];
+            Fixture.BufferReader.ReadInto<int>(bulk);
+
+            Fixture.BufferReader.Position = 0;
+
+            for (var i = 0; i < count; i++)
+            {
+                Assert.Equal(Fixture.BufferReader.Read<int>(), bulk[i]);
+            }
+        }
+
+        [Fact]
+        public void ReadInto_an_empty_span_should_not_advance_the_position()
+        {
+            Fixture.BufferReader.ReadInto<int>([]);
+
+            Assert.Equal(0, Fixture.BufferReader.Position);
+        }
+
+        [Fact]
+        public void ReadInto_a_span_extending_outside_the_readable_region_should_throw()
+        {
+            Fixture.BufferReader.Position = Fixture.BufferReader.Length - 2;
+
+            var expectedException = ExceptionHelper.EndOfDataException();
+            var actualException = Assert.Throws<EndOfStreamException>(() => Fixture.BufferReader.ReadInto<int>(new int[1]));
+
+            Assert.Equal(expectedException.Message, actualException.Message);
+        }
+
         [Fact]
         public void Attempting_to_read_a_byte_outside_the_readable_region_of_the_underlying_byte_array_should_throw()
         {

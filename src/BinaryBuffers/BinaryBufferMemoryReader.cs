@@ -196,6 +196,56 @@ public sealed class BinaryBufferMemoryReader(in ReadOnlyMemory<byte> data) : IBu
     }
 
     /// <summary>
+    /// Reads an unmanaged value of type <typeparamref name="T"/> from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by the size of <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The unmanaged type to read. Intended for primitive numeric types; composite layouts such as <see cref="decimal"/> are only read correctly on little-endian platforms (use the dedicated <see cref="ReadDecimal"/> for those).</typeparam>
+    public T Read<T>() where T : unmanaged
+    {
+        var value = Unsafe.ReadUnaligned<T>(ref InternalReadRef(Unsafe.SizeOf<T>()));
+
+        return BitConverter.IsLittleEndian || Unsafe.SizeOf<T>() == 1 ? value : ReverseEndianness(value);
+    }
+
+    /// <summary>
+    /// Reads enough unmanaged values of type <typeparamref name="T"/> to fill <paramref name="destination"/> from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by the total number of bytes read.
+    /// <para>On little-endian platforms this is a single bulk copy, amortizing away the per-call bounds-checking and endianness branching incurred by repeated <see cref="Read{T}"/> calls in a loop.</para>
+    /// </summary>
+    /// <typeparam name="T">The unmanaged element type to read. See <see cref="Read{T}"/> for endianness caveats.</typeparam>
+    /// <param name="destination">The span to read the values into. Its length determines how many values are read.</param>
+    public void ReadInto<T>(Span<T> destination) where T : unmanaged
+    {
+        if (destination.IsEmpty)
+        {
+            return;
+        }
+
+        var byteCount = checked(destination.Length * Unsafe.SizeOf<T>());
+
+        InternalReadSpan(byteCount).CopyTo(MemoryMarshal.AsBytes(destination));
+
+        if (!BitConverter.IsLittleEndian && Unsafe.SizeOf<T>() > 1)
+        {
+            for (var i = 0; i < destination.Length; i++)
+            {
+                destination[i] = ReverseEndianness(destination[i]);
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Reverses the byte order of an unmanaged value. Correct for primitive numeric types.
+    /// </summary>
+    private static T ReverseEndianness<T>(T value) where T : unmanaged
+    {
+        Span<byte> buffer = stackalloc byte[Unsafe.SizeOf<T>()];
+        Unsafe.WriteUnaligned(ref MemoryMarshal.GetReference(buffer), value);
+        buffer.Reverse();
+
+        return Unsafe.ReadUnaligned<T>(ref MemoryMarshal.GetReference(buffer));
+    }
+
+    /// <summary>
     /// Reads the next byte from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by one byte.
     /// </summary>
     private byte InternalReadByte()

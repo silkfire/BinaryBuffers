@@ -74,6 +74,47 @@ public class BinaryReaderVsBufferReader_Decimal : BinaryReaderVsBufferReaderBase
     }
 }
 
+public class BufferReader_BulkInt32
+{
+    private const int Loops = 200_000;
+
+    // 128 int32s = one 512-byte sector's worth of SecIds, as read by LiteCDF when building the SAT chain.
+    private const int IntCount = 128;
+
+    private readonly BinaryBufferReader _bufferReader;
+    private readonly int[] _destination = new int[IntCount];
+
+    public BufferReader_BulkInt32()
+    {
+        _bufferReader = new BinaryBufferReader(new byte[IntCount * sizeof(int)]);
+    }
+
+    [Benchmark(Baseline = true)]
+    public void PerElement_ReadInt32_Loop()
+    {
+        for (var i = 0; i < Loops; i++)
+        {
+            _bufferReader.Position = 0;
+
+            for (var j = 0; j < IntCount; j++)
+            {
+                _destination[j] = _bufferReader.ReadInt32();
+            }
+        }
+    }
+
+    [Benchmark]
+    public void Bulk_ReadInto()
+    {
+        for (var i = 0; i < Loops; i++)
+        {
+            _bufferReader.Position = 0;
+
+            _bufferReader.ReadInto<int>(_destination);
+        }
+    }
+}
+
 public class BinaryReaderVsBufferReader_Float : BinaryReaderVsBufferReaderBase
 {
     [Benchmark(Baseline = true)]

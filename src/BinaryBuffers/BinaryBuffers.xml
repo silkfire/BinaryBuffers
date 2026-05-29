@@ -111,6 +111,25 @@
             Reads a 64-bit unsigned integer from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by eight bytes.
             </summary>
         </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.Read``1">
+            <summary>
+            Reads an unmanaged value of type <typeparamref name="T"/> from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by the size of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The unmanaged type to read. Intended for primitive numeric types; composite layouts such as <see cref="T:System.Decimal"/> are only read correctly on little-endian platforms (use the dedicated <see cref="M:BinaryBuffers.BinaryBufferMemoryReader.ReadDecimal"/> for those).</typeparam>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadInto``1(System.Span{``0})">
+            <summary>
+            Reads enough unmanaged values of type <typeparamref name="T"/> to fill <paramref name="destination"/> from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by the total number of bytes read.
+            <para>On little-endian platforms this is a single bulk copy, amortizing away the per-call bounds-checking and endianness branching incurred by repeated <see cref="M:BinaryBuffers.BinaryBufferMemoryReader.Read``1"/> calls in a loop.</para>
+            </summary>
+            <typeparam name="T">The unmanaged element type to read. See <see cref="M:BinaryBuffers.BinaryBufferMemoryReader.Read``1"/> for endianness caveats.</typeparam>
+            <param name="destination">The span to read the values into. Its length determines how many values are read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReverseEndianness``1(``0)">
+            <summary>
+            Reverses the byte order of an unmanaged value. Correct for primitive numeric types.
+            </summary>
+        </member>
         <member name="M:BinaryBuffers.BinaryBufferMemoryReader.InternalReadByte">
             <summary>
             Reads the next byte from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by one byte.
@@ -241,6 +260,25 @@
         <member name="M:BinaryBuffers.BinaryBufferReader.ReadUInt64">
             <summary>
             Reads a 64-bit unsigned integer from the underlying byte array and advances the current position by eight bytes.
+            </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.Read``1">
+            <summary>
+            Reads an unmanaged value of type <typeparamref name="T"/> from the underlying byte array and advances the current position by the size of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The unmanaged type to read. Intended for primitive numeric types; composite layouts such as <see cref="T:System.Decimal"/> are only read correctly on little-endian platforms (use the dedicated <see cref="M:BinaryBuffers.BinaryBufferReader.ReadDecimal"/> for those).</typeparam>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReadInto``1(System.Span{``0})">
+            <summary>
+            Reads enough unmanaged values of type <typeparamref name="T"/> to fill <paramref name="destination"/> from the underlying byte array and advances the current position by the total number of bytes read.
+            <para>On little-endian platforms this is a single bulk copy, amortizing away the per-call bounds-checking and endianness branching incurred by repeated <see cref="M:BinaryBuffers.BinaryBufferReader.Read``1"/> calls in a loop.</para>
+            </summary>
+            <typeparam name="T">The unmanaged element type to read. See <see cref="M:BinaryBuffers.BinaryBufferReader.Read``1"/> for endianness caveats.</typeparam>
+            <param name="destination">The span to read the values into. Its length determines how many values are read.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.ReverseEndianness``1(``0)">
+            <summary>
+            Reverses the byte order of an unmanaged value. Correct for primitive numeric types.
             </summary>
         </member>
         <member name="M:BinaryBuffers.BinaryBufferReader.InternalReadByte">
@@ -501,6 +539,20 @@
             <summary>
             Reads 64-bit unsigned integer from the current binary stream and advances the current position within the stream by eight bytes.
             </summary>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.Read``1">
+            <summary>
+            Reads an unmanaged value of type <typeparamref name="T"/> from the current binary stream and advances the current position within the stream by the size of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The unmanaged type to read. Intended for primitive numeric types; composite layouts such as <see cref="T:System.Decimal"/> are only read correctly on little-endian platforms (use the dedicated <see cref="M:BinaryBuffers.IBufferReader.ReadDecimal"/> for those).</typeparam>
+        </member>
+        <member name="M:BinaryBuffers.IBufferReader.ReadInto``1(System.Span{``0})">
+            <summary>
+            Reads enough unmanaged values of type <typeparamref name="T"/> to fill <paramref name="destination"/> from the current binary stream and advances the current position within the stream by the total number of bytes read.
+            <para>On little-endian platforms this is a single bulk copy, amortizing away the per-call bounds-checking and endianness branching incurred by repeated <see cref="M:BinaryBuffers.IBufferReader.Read``1"/> calls in a loop.</para>
+            </summary>
+            <typeparam name="T">The unmanaged element type to read. See <see cref="M:BinaryBuffers.IBufferReader.Read``1"/> for endianness caveats.</typeparam>
+            <param name="destination">The span to read the values into. Its length determines how many values are read.</param>
         </member>
     </members>
 </doc>

@@ -93,4 +93,18 @@ public interface IBufferReader
     /// Reads 64-bit unsigned integer from the current binary stream and advances the current position within the stream by eight bytes.
     /// </summary>
     ulong ReadUInt64();
+
+    /// <summary>
+    /// Reads an unmanaged value of type <typeparamref name="T"/> from the current binary stream and advances the current position within the stream by the size of <typeparamref name="T"/>.
+    /// </summary>
+    /// <typeparam name="T">The unmanaged type to read. Intended for primitive numeric types; composite layouts such as <see cref="decimal"/> are only read correctly on little-endian platforms (use the dedicated <see cref="ReadDecimal"/> for those).</typeparam>
+    T Read<T>() where T : unmanaged;
+
+    /// <summary>
+    /// Reads enough unmanaged values of type <typeparamref name="T"/> to fill <paramref name="destination"/> from the current binary stream and advances the current position within the stream by the total number of bytes read.
+    /// <para>On little-endian platforms this is a single bulk copy, amortizing away the per-call bounds-checking and endianness branching incurred by repeated <see cref="Read{T}"/> calls in a loop.</para>
+    /// </summary>
+    /// <typeparam name="T">The unmanaged element type to read. See <see cref="Read{T}"/> for endianness caveats.</typeparam>
+    /// <param name="destination">The span to read the values into. Its length determines how many values are read.</param>
+    void ReadInto<T>(Span<T> destination) where T : unmanaged;
 }

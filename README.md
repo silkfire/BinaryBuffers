@@ -31,6 +31,26 @@ var year = reader.ReadInt32();
 var time = reader.ReadDouble();
 ```
 
+## Bulk reading
+
+When you need to read a run of values of the same type — e.g. a block of `int`s — `ReadInto<T>` reads them all in a single bounds-checked bulk copy instead of one call per element. On little-endian platforms it compiles down to a single `memcpy`, which is dramatically faster than calling `ReadInt32()` in a loop (see [Benchmarks](#benchmarks)):
+
+```csharp
+var reader = new BinaryBufferReader(buffer);
+
+var values = new int[128];
+reader.ReadInto<int>(values);   // reads 128 consecutive Int32s in one shot
+```
+
+There is also a generic single-value `Read<T>()` for any unmanaged type:
+
+```csharp
+var year = reader.Read<int>();
+var time = reader.Read<double>();
+```
+
+> Both APIs are intended for primitive numeric types. On big-endian platforms each value is byte-swapped, which is correct for integer and floating-point types but not for composite layouts such as `decimal` (use the dedicated `ReadDecimal()` for those).
+
 ## Reading from a `ReadOnlyMemory<byte>`
 
 When your data lives in a `ReadOnlyMemory<byte>`, use `BinaryBufferMemoryReader`:
@@ -83,6 +103,13 @@ Performance tests were executed using **.NET 10** running on a machine with a 16
 | `BufferReader_ReadDecimal` | 2.966 ms | 0.0318 ms | 0.0297 ms |     -79% |
 | `BinaryReader_ReadFloat` | 11.666 ms | 0.0177 ms | 0.0166 ms | *baseline* |
 | `BufferReader_ReadFloat` | 2.012 ms | 0.0011 ms | 0.0011 ms |     -83% |
+
+Reading a block of 128 `Int32`s, bulk `ReadInto<int>` vs. a per-element `ReadInt32()` loop:
+
+| Method                    | Mean       | Ratio    |
+|-------------------------- |-----------:|---------:|
+| `PerElement_ReadInt32_Loop` | 12,017.4 us | *baseline* |
+| `Bulk_ReadInto` |    701.0 us |     -94% |
 
 ### BinaryBufferWriter
 
