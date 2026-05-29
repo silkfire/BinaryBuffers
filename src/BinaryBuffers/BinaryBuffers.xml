@@ -5,9 +5,24 @@
     </assembly>
     <members>
         <member name="T:BinaryBuffers.BinaryBufferMemoryReader">
-            <summary>
-            Implements an <see cref="T:BinaryBuffers.IBufferReader"/> that can read primitive data types from a <see cref="T:System.Byte"/>-based <see cref="T:System.ReadOnlyMemory`1"/>.
-            </summary>
+             <summary>
+             Implements an <see cref="T:BinaryBuffers.IBufferReader"/> that can read primitive data types from a <see cref="T:System.Byte"/>-based <see cref="T:System.ReadOnlyMemory`1"/>.
+             </summary>
+             <remarks>
+             Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
+             </remarks>
+             <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
+            
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.#ctor(System.ReadOnlyMemory{System.Byte}@)">
+             <summary>
+             Implements an <see cref="T:BinaryBuffers.IBufferReader"/> that can read primitive data types from a <see cref="T:System.Byte"/>-based <see cref="T:System.ReadOnlyMemory`1"/>.
+             </summary>
+             <remarks>
+             Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
+             </remarks>
+             <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
+            
         </member>
         <member name="P:BinaryBuffers.BinaryBufferMemoryReader.Offset">
             <summary>
@@ -23,13 +38,6 @@
             <summary>
             Gets or sets the current reading position within the underlying <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
-        </member>
-        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.#ctor(System.ReadOnlyMemory{System.Byte}@)">
-             <summary>
-             Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
-             </summary>
-             <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
-            
         </member>
         <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadBoolean">
             <summary>

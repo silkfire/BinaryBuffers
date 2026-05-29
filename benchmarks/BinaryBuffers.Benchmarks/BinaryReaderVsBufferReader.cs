@@ -1,102 +1,101 @@
-﻿namespace BinaryBuffers.Benchmarks
+﻿namespace BinaryBuffers.Benchmarks;
+
+using BenchmarkDotNet.Attributes;
+
+using System.IO;
+
+public abstract class BinaryReaderVsBufferReaderBase
 {
-    using BenchmarkDotNet.Attributes;
+    protected const int Loops = 5_000_000;
 
-    using System.IO;
+    protected readonly MemoryStream _memoryStream;
+    protected readonly BinaryReader _binaryReader;
+    protected readonly BinaryBufferReader _bufferReader;
 
-    public abstract class BinaryReaderVsBufferReaderBase
+    protected BinaryReaderVsBufferReaderBase()
     {
-        protected const int Loops = 5_000_000;
+        var buffer = new byte[1024];
+        _memoryStream = new MemoryStream(buffer);
+        _binaryReader = new BinaryReader(_memoryStream);
+        _bufferReader = new BinaryBufferReader(buffer);
+    }
+}
 
-        protected readonly MemoryStream _memoryStream;
-        protected readonly BinaryReader _binaryReader;
-        protected readonly BinaryBufferReader _bufferReader;
-
-        protected BinaryReaderVsBufferReaderBase()
+public class BinaryReaderVsBufferReader_Int : BinaryReaderVsBufferReaderBase
+{
+    [Benchmark(Baseline = true)]
+    public void BinaryReader_ReadInt()
+    {
+        for (var i = 0; i < Loops; i++)
         {
-            var buffer = new byte[1024];
-            _memoryStream = new MemoryStream(buffer);
-            _binaryReader = new BinaryReader(_memoryStream);
-            _bufferReader = new BinaryBufferReader(buffer);
+            _memoryStream.Position = 0;
+
+            _binaryReader.ReadInt32();
+            _binaryReader.ReadInt64();
         }
     }
 
-    public class BinaryReaderVsBufferReader_Int : BinaryReaderVsBufferReaderBase
+    [Benchmark]
+    public void BufferReader_ReadInt()
     {
-        [Benchmark(Baseline = true)]
-        public void BinaryReader_ReadInt()
+        for (var i = 0; i < Loops; i++)
         {
-            for (var i = 0; i < Loops; i++)
-            {
-                _memoryStream.Position = 0;
+            _bufferReader.Position = 0;
 
-                _binaryReader.ReadInt32();
-                _binaryReader.ReadInt64();
-            }
+            _bufferReader.ReadInt32();
+            _bufferReader.ReadInt64();
         }
+    }
+}
 
-        [Benchmark]
-        public void BufferReader_ReadInt()
+public class BinaryReaderVsBufferReader_Decimal : BinaryReaderVsBufferReaderBase
+{
+    [Benchmark(Baseline = true)]
+    public void BinaryReader_ReadDecimal()
+    {
+        for (var i = 0; i < Loops; i++)
         {
-            for (var i = 0; i < Loops; i++)
-            {
-                _bufferReader.Position = 0;
+            _memoryStream.Position = 0;
 
-                _bufferReader.ReadInt32();
-                _bufferReader.ReadInt64();
-            }
+            _binaryReader.ReadDecimal();
         }
     }
 
-    public class BinaryReaderVsBufferReader_Decimal : BinaryReaderVsBufferReaderBase
+
+    [Benchmark]
+    public void BufferReader_ReadDecimal()
     {
-        [Benchmark(Baseline = true)]
-        public void BinaryReader_ReadDecimal()
+        for (var i = 0; i < Loops; i++)
         {
-            for (var i = 0; i < Loops; i++)
-            {
-                _memoryStream.Position = 0;
+            _bufferReader.Position = 0;
 
-                _binaryReader.ReadDecimal();
-            }
+            _bufferReader.ReadDecimal();
         }
+    }
+}
 
-
-        [Benchmark]
-        public void BufferReader_ReadDecimal()
+public class BinaryReaderVsBufferReader_Float : BinaryReaderVsBufferReaderBase
+{
+    [Benchmark(Baseline = true)]
+    public void BinaryReader_ReadFloat()
+    {
+        for (var i = 0; i < Loops; i++)
         {
-            for (var i = 0; i < Loops; i++)
-            {
-                _bufferReader.Position = 0;
+            _memoryStream.Position = 0;
 
-                _bufferReader.ReadDecimal();
-            }
+            _binaryReader.ReadSingle();
         }
     }
 
-    public class BinaryReaderVsBufferReader_Float : BinaryReaderVsBufferReaderBase
+
+    [Benchmark]
+    public void BufferReader_ReadFloat()
     {
-        [Benchmark(Baseline = true)]
-        public void BinaryReader_ReadFloat()
+        for (var i = 0; i < Loops; i++)
         {
-            for (var i = 0; i < Loops; i++)
-            {
-                _memoryStream.Position = 0;
+            _bufferReader.Position = 0;
 
-                _binaryReader.ReadSingle();
-            }
-        }
-
-
-        [Benchmark]
-        public void BufferReader_ReadFloat()
-        {
-            for (var i = 0; i < Loops; i++)
-            {
-                _bufferReader.Position = 0;
-
-                _bufferReader.ReadSingle();
-            }
+            _bufferReader.ReadSingle();
         }
     }
 }
