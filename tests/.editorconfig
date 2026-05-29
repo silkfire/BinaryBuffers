@@ -1,0 +1,6 @@
+[*.cs]
+
+# CA1816: Dispose methods should call GC.SuppressFinalize
+# Disabled for test code: fixtures wrap only managed resources and have no
+# finalizers, so there is nothing to suppress.
+dotnet_diagnostic.CA1816.severity = none
