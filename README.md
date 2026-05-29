@@ -4,11 +4,15 @@
 
 [![NuGet](https://img.shields.io/nuget/v/BinaryBuffers.svg)](https://www.nuget.org/packages/BinaryBuffers)
 
-BinaryBuffers offers a highly performant implementation of `BinaryReader` and `BinaryWriter`, working directly on a `byte` array, thus eliminating the need for an intermediate `Stream` object.
+BinaryBuffers offers a highly performant implementation of `BinaryReader` and `BinaryWriter`, working directly on a `byte` array or `ReadOnlyMemory<byte>`, thus eliminating the need for an intermediate `Stream` object.
 
 # How to use
 
-`BinaryBufferReader` and `BinaryBufferWriter` are the respective names of the reader and writer. Both classes operate on a `byte[]` as its underlying data buffer.
+The library provides three types:
+
+- **`BinaryBufferReader`** — reads primitive data types from a `byte[]`.
+- **`BinaryBufferWriter`** — writes primitive data types to a `byte[]`.
+- **`BinaryBufferMemoryReader`** — reads primitive data types from a `ReadOnlyMemory<byte>`.
 
 ```csharp
 // Provide a buffer to the reader/writer
@@ -25,6 +29,42 @@ var reader = new BinaryBufferReader(buffer);
 
 var year = reader.ReadInt32();
 var time = reader.ReadDouble();
+```
+
+## Reading from a `ReadOnlyMemory<byte>`
+
+When your data lives in a `ReadOnlyMemory<byte>`, use `BinaryBufferMemoryReader`:
+
+```csharp
+ReadOnlyMemory<byte> memory = buffer;
+
+var reader = new BinaryBufferMemoryReader(memory);
+
+var year = reader.ReadInt32();
+var time = reader.ReadDouble();
+```
+
+## Constructor overloads
+
+`BinaryBufferReader` and `BinaryBufferWriter` can both be constrained to a sub-region of the underlying array by supplying an offset and length:
+
+```csharp
+// Read/write within the boundaries [offset, offset + length)
+var reader = new BinaryBufferReader(buffer, offset: 10, length: 40);
+var writer = new BinaryBufferWriter(buffer, offset: 10, length: 40);
+```
+
+`BinaryBufferReader` additionally accepts an `ArraySegment<byte>`, which carries its own offset and count:
+
+```csharp
+var segment = new ArraySegment<byte>(buffer, 10, 40);
+var reader = new BinaryBufferReader(segment);
+```
+
+`BinaryBufferMemoryReader` is constructed from a `ReadOnlyMemory<byte>`; slice the memory beforehand to read from a sub-region:
+
+```csharp
+var reader = new BinaryBufferMemoryReader(memory.Slice(10, 40));
 ```
 
 # Benchmarks
