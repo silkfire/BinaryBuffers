@@ -21,13 +21,17 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore
+        run: |
+          dotnet restore src/BinaryBuffers/BinaryBuffers.csproj
+          dotnet restore tests/BinaryBuffers.Tests/BinaryBuffers.Tests.csproj
 
       - name: Build
-        run: dotnet build -c Release --no-restore
+        run: |
+          dotnet build src/BinaryBuffers/BinaryBuffers.csproj -c Release --no-restore
+          dotnet build tests/BinaryBuffers.Tests/BinaryBuffers.Tests.csproj -c Release --no-restore
 
       - name: Test
-        run: dotnet test -c Release --no-build
+        run: dotnet test tests/BinaryBuffers.Tests/BinaryBuffers.Tests.csproj -c Release --no-build
 
       - name: Pack
         run: dotnet pack src/BinaryBuffers/BinaryBuffers.csproj -c Release --no-build -o artifacts
