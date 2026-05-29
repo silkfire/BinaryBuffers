@@ -25,10 +25,10 @@
             </summary>
         </member>
         <member name="M:BinaryBuffers.BinaryBufferMemoryReader.#ctor(System.ReadOnlyMemory{System.Byte}@)">
-            <summary>
-            Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
-            </summary>
-            <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
+             <summary>
+             Initializes a new instance of <see cref="T:BinaryBuffers.BinaryBufferReader"/> based on the specified <see cref="T:System.ReadOnlyMemory`1"/>.
+             </summary>
+             <param name="data">The input <see cref="T:System.ReadOnlyMemory`1"/>.</param>
             
         </member>
         <member name="M:BinaryBuffers.BinaryBufferMemoryReader.ReadBoolean">
@@ -113,6 +113,12 @@
             Returns a read-only span over the specified number of bytes from the underlying <see cref="T:System.ReadOnlyMemory`1"/> and advances the current position by that number of bytes.
             </summary>
             <param name="count">The size of the read-only span to return.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferMemoryReader.InternalReadRef(System.Int32)">
+            <summary>
+            Bounds-checks a read of <paramref name="count"/> bytes, advances the current position and returns a reference to the first byte to read from.
+            </summary>
+            <param name="count">The number of bytes that will be read.</param>
         </member>
         <member name="T:BinaryBuffers.BinaryBufferReader">
             <summary>
@@ -239,6 +245,12 @@
             Returns a read-only span over the specified number of bytes from the underlying byte array and advances the current position by that number of bytes.
             </summary>
             <param name="count">The size of the read-only span to return.</param>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferReader.InternalReadRef(System.Int32)">
+            <summary>
+            Bounds-checks a read of <paramref name="count"/> bytes, advances the current position and returns a reference to the first byte to read from.
+            </summary>
+            <param name="count">The number of bytes that will be read.</param>
         </member>
         <member name="T:BinaryBuffers.BinaryBufferWriter">
             <summary>
@@ -383,6 +395,12 @@
             <summary>
             Returns the underlying byte array of the writer.
             </summary>
+        </member>
+        <member name="M:BinaryBuffers.BinaryBufferWriter.InternalAdvance(System.Int32)">
+            <summary>
+            Bounds-checks a write of <paramref name="count"/> bytes, advances the current position and returns the position at which the write should begin.
+            </summary>
+            <param name="count">The number of bytes that will be written.</param>
         </member>
         <member name="T:BinaryBuffers.IBufferReader">
             <summary>

@@ -1,12 +1,14 @@
-﻿namespace BinaryBuffers
+namespace BinaryBuffers
 {
     using System;
     using System.Buffers.Binary;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Implements an <see cref="IBufferReader"/> that can read primitive data types from a <see cref="byte"/>-based <see cref="ReadOnlyMemory{T}"/>.
     /// </summary>
-    public class BinaryBufferMemoryReader : IBufferReader
+    public sealed class BinaryBufferMemoryReader : IBufferReader
     {
         private readonly ReadOnlyMemory<byte> _data;
         private int _position;
@@ -50,7 +52,7 @@
         /// Initializes a new instance of <see cref="BinaryBufferReader"/> based on the specified <see cref="ReadOnlyMemory{T}"/>.
         /// </summary>
         /// <param name="data">The input <see cref="ReadOnlyMemory{T}"/>.</param>
-        /// 
+        ///
         public BinaryBufferMemoryReader(in ReadOnlyMemory<byte> data)
         {
             _data = data;
@@ -62,93 +64,150 @@
         /// <summary>
         /// Reads a boolean value from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by one byte.
         /// </summary>
-        public virtual bool ReadBoolean() => InternalReadByte() != 0;
+        public bool ReadBoolean() => InternalReadByte() != 0;
 
         /// <summary>
         /// Reads the next byte from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by one byte.
         /// </summary>
-        public virtual byte ReadByte() => InternalReadByte();
+        public byte ReadByte() => InternalReadByte();
 
         /// <summary>
         /// Reads the specified number of bytes from the underlying <see cref="ReadOnlyMemory{T}"/> into a new byte array and advances the current position by that number of bytes.
         /// </summary>
         /// <param name="count">The number of bytes to read.</param>
-        public virtual byte[] ReadBytes(int count) => InternalReadSpan(count).ToArray();
+        public byte[] ReadBytes(int count) => InternalReadSpan(count).ToArray();
 
         /// <summary>
         /// Reads a decimal value from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by sixteen bytes.
         /// </summary>
-        public virtual decimal ReadDecimal()
+        public decimal ReadDecimal()
         {
-            var buffer = InternalReadSpan(16);
+            ref var source = ref InternalReadRef(16);
 
-            var flags = BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(12));
+            var lo    = Unsafe.ReadUnaligned<int>(ref source);
+            var mid   = Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref source, 4));
+            var hi    = Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref source, 8));
+            var flags = Unsafe.ReadUnaligned<int>(ref Unsafe.Add(ref source, 12));
+
+            if (!BitConverter.IsLittleEndian)
+            {
+                lo    = BinaryPrimitives.ReverseEndianness(lo);
+                mid   = BinaryPrimitives.ReverseEndianness(mid);
+                hi    = BinaryPrimitives.ReverseEndianness(hi);
+                flags = BinaryPrimitives.ReverseEndianness(flags);
+            }
 
             var isNegative = (flags & unchecked((int)0x80000000)) != 0;
             var scale = (byte)((flags >> 16) & 0xFF);
 
-            return new decimal(BinaryPrimitives.ReadInt32LittleEndian(buffer),                  // lo
-                               BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(4)),         // mid
-                               BinaryPrimitives.ReadInt32LittleEndian(buffer.Slice(8)),         // hi
-                               isNegative,
-                               scale);
+            return new decimal(lo, mid, hi, isNegative, scale);
         }
 
         /// <summary>
         /// Reads a double-precision floating-point number from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by eight bytes.
         /// </summary>
-        public virtual double ReadDouble() => BinaryPrimitives.ReadDoubleLittleEndian(InternalReadSpan(8));
+        public double ReadDouble()
+        {
+            var value = Unsafe.ReadUnaligned<long>(ref InternalReadRef(8));
+
+            if (!BitConverter.IsLittleEndian)
+            {
+                value = BinaryPrimitives.ReverseEndianness(value);
+            }
+
+            return BitConverter.Int64BitsToDouble(value);
+        }
 
         /// <summary>
         /// Reads a 16-bit signed integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by two bytes.
         /// </summary>
-        public virtual short ReadInt16() => BinaryPrimitives.ReadInt16LittleEndian(InternalReadSpan(2));
+        public short ReadInt16()
+        {
+            var value = Unsafe.ReadUnaligned<short>(ref InternalReadRef(2));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads a 32-bit signed integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by four bytes.
         /// </summary>
-        public virtual int ReadInt32() => BinaryPrimitives.ReadInt32LittleEndian(InternalReadSpan(4));
+        public int ReadInt32()
+        {
+            var value = Unsafe.ReadUnaligned<int>(ref InternalReadRef(4));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads a 64-bit signed integer signed integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by eight bytes.
         /// </summary>
-        public virtual long ReadInt64() => BinaryPrimitives.ReadInt64LittleEndian(InternalReadSpan(8));
+        public long ReadInt64()
+        {
+            var value = Unsafe.ReadUnaligned<long>(ref InternalReadRef(8));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads a signed byte from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by one byte.
         /// </summary>
-        public virtual sbyte ReadSByte() => (sbyte) InternalReadByte();
+        public sbyte ReadSByte() => (sbyte) InternalReadByte();
 
         /// <summary>
         /// Reads a single-precision floating-point number from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by four bytes.
         /// </summary>
-        public virtual float ReadSingle() => BinaryPrimitives.ReadSingleLittleEndian(InternalReadSpan(4));
+        public float ReadSingle()
+        {
+            var value = Unsafe.ReadUnaligned<int>(ref InternalReadRef(4));
+
+            if (!BitConverter.IsLittleEndian)
+            {
+                value = BinaryPrimitives.ReverseEndianness(value);
+            }
+
+            return BitConverter.Int32BitsToSingle(value);
+        }
 
         /// <summary>
         /// Reads a span of bytes from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by the number of bytes read.
         /// </summary>
         /// <param name="count">The number of bytes to read.</param>
-        public virtual ReadOnlySpan<byte> ReadSpan(int count) => InternalReadSpan(count);
+        public ReadOnlySpan<byte> ReadSpan(int count) => InternalReadSpan(count);
 
         /// <summary>
         /// Reads a 16-bit unsigned integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by two bytes.
         /// </summary>
-        public virtual ushort ReadUInt16() => BinaryPrimitives.ReadUInt16LittleEndian(InternalReadSpan(2));
+        public ushort ReadUInt16()
+        {
+            var value = Unsafe.ReadUnaligned<ushort>(ref InternalReadRef(2));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads a 32-bit unsigned integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by four bytes.
         /// </summary>
-        public virtual uint ReadUInt32() => BinaryPrimitives.ReadUInt32LittleEndian(InternalReadSpan(4));
+        public uint ReadUInt32()
+        {
+            var value = Unsafe.ReadUnaligned<uint>(ref InternalReadRef(4));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads a 64-bit unsigned integer from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by eight bytes.
         /// </summary>
-        public virtual ulong ReadUInt64() => BinaryPrimitives.ReadUInt64LittleEndian(InternalReadSpan(8));
+        public ulong ReadUInt64()
+        {
+            var value = Unsafe.ReadUnaligned<ulong>(ref InternalReadRef(8));
+
+            return BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
+        }
 
         /// <summary>
         /// Reads the next byte from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by one byte.
         /// </summary>
-        protected byte InternalReadByte()
+        private byte InternalReadByte()
         {
             var curPos = _position;
             var newPos = curPos + 1;
@@ -161,14 +220,14 @@
 
             _position = newPos;
 
-            return _data.Span[curPos];
+            return Unsafe.Add(ref MemoryMarshal.GetReference(_data.Span), (nint)(uint)curPos);
         }
 
         /// <summary>
         /// Returns a read-only span over the specified number of bytes from the underlying <see cref="ReadOnlyMemory{T}"/> and advances the current position by that number of bytes.
         /// </summary>
         /// <param name="count">The size of the read-only span to return.</param>
-        protected ReadOnlySpan<byte> InternalReadSpan(int count)
+        private ReadOnlySpan<byte> InternalReadSpan(int count)
         {
             if (count <= 0)
             {
@@ -178,7 +237,7 @@
             var curPos = _position;
             var newPos = curPos + count;
 
-            if ((uint)newPos > (uint) Length)
+            if ((uint)newPos > (uint)Length)
             {
                 _position = Length;
                 throw ExceptionHelper.EndOfDataException();
@@ -186,7 +245,28 @@
 
             _position = newPos;
 
-            return _data.Slice(curPos, count).Span;
+            return _data.Span.Slice(curPos, count);
+        }
+
+        /// <summary>
+        /// Bounds-checks a read of <paramref name="count"/> bytes, advances the current position and returns a reference to the first byte to read from.
+        /// </summary>
+        /// <param name="count">The number of bytes that will be read.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private ref byte InternalReadRef(int count)
+        {
+            var curPos = _position;
+            var newPos = curPos + count;
+
+            if ((uint)newPos > (uint)Length)
+            {
+                _position = Length;
+                throw ExceptionHelper.EndOfDataException();
+            }
+
+            _position = newPos;
+
+            return ref Unsafe.Add(ref MemoryMarshal.GetReference(_data.Span), (nint)(uint)curPos);
         }
     }
 }

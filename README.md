@@ -29,7 +29,7 @@ var time = reader.ReadDouble();
 
 # Benchmarks
 
-Benchmarks show an average of **69%** improvement in reading and **79%** in writing.
+Benchmarks show an average of **80%** improvement in reading and **84%** in writing.
 
 Performance tests were executed using **.NET 10** running on a machine with a 16-core CPU.
 
@@ -37,20 +37,20 @@ Performance tests were executed using **.NET 10** running on a machine with a 16
 
 | Method                   | Mean     | Error    | StdDev   | Ratio    |
 |------------------------- |---------:|---------:|---------:|---------:|
-| `BinaryReader_ReadInt` | 16.960 ms | 0.0296 ms | 0.0277 ms | *baseline* |
-| `BufferReader_ReadInt` |  5.176 ms | 0.0139 ms | 0.0124 ms |     -69% |
-| `BinaryReader_ReadDecimal` | 14.323 ms | 0.253 ms | 0.211 ms | *baseline* |
-| `BufferReader_ReadDecimal` | 4.383 ms | 0.0179 ms | 0.104 ms |     -69% |
-| `BinaryReader_ReadFloat` | 11.689 ms | 0.0154 ms | 0.0167 ms | *baseline* |
-| `BufferReader_ReadFloat` | 3.724 ms | 0.0150 ms | 0.0144 ms |     -68% |
+| `BinaryReader_ReadInt` | 16.633 ms | 0.0406 ms | 0.0380 ms | *baseline* |
+| `BufferReader_ReadInt` |  3.607 ms | 0.0020 ms | 0.0019 ms |     -78% |
+| `BinaryReader_ReadDecimal` | 14.333 ms | 0.0129 ms | 0.0121 ms | *baseline* |
+| `BufferReader_ReadDecimal` | 2.966 ms | 0.0318 ms | 0.0297 ms |     -79% |
+| `BinaryReader_ReadFloat` | 11.666 ms | 0.0177 ms | 0.0166 ms | *baseline* |
+| `BufferReader_ReadFloat` | 2.012 ms | 0.0011 ms | 0.0011 ms |     -83% |
 
 ### BinaryBufferWriter
 
 | Method                    | Mean      | Error     | StdDev    | Ratio    |
 |-------------------------- |----------:|----------:|----------:|---------:|
-| `BinaryWriter_WriteInt` | 39.768 ms | 0.0756 ms | 0.0670 ms | *baseline* |
-| `BufferWriter_WriteInt` | 8.361 ms | 0.0120 ms | 0.0107 ms |     -79% |
-| `BinaryWriter_WriteDecimal` | 27.283 ms | 0.0133 ms | 0.0118 ms | *baseline* |
-| `BufferWriter_WriteDecimal` |  5.725 ms | 0.0078 ms | 0.0328 ms |     -79% |
-| `BinaryWriter_WriteFloat` | 20.537 ms | 0.0533 ms | 0.0499 ms | *baseline* |
-| `BufferWriter_WriteFloat` | 4.488 ms | 0.0161 ms | 0.0151 ms |     -78% |
+| `BinaryWriter_WriteInt` | 39.373 ms | 0.0547 ms | 0.0511 ms | *baseline* |
+| `BufferWriter_WriteInt` | 5.602 ms | 0.0375 ms | 0.0350 ms |     -86% |
+| `BinaryWriter_WriteDecimal` | 27.106 ms | 0.0171 ms | 0.0160 ms | *baseline* |
+| `BufferWriter_WriteDecimal` |  4.421 ms | 0.0058 ms | 0.0052 ms |     -84% |
+| `BinaryWriter_WriteFloat` | 20.406 ms | 0.0205 ms | 0.0192 ms | *baseline* |
+| `BufferWriter_WriteFloat` | 3.379 ms | 0.0083 ms | 0.0078 ms |     -83% |
